@@ -4,6 +4,7 @@ use warnings;
 use warnings::register;
 use Carp ();
 use Encode ();
+use JSON;
 use JSON::MaybeXS ();
 use constant DEBUG => $ENV{TELEGRAM_BOTAPI_DEBUG} || 0;
 
@@ -187,7 +188,8 @@ sub api_request
         {
             $is_lwp
                 and push @request, DEBUG ? (DBG => $postdata) : (), # handled in _fix_request_args
-                                   Content      => JSON::MaybeXS::encode_json ($postdata),
+#                                   Content      => JSON::MaybeXS::encode_json ($postdata),
+                                   Content      => JSON->new->encode($postdata),
                                    Content_Type => "application/json"
                 or  push @request, json         => $postdata;
         }
